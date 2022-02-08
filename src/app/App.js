@@ -9,6 +9,7 @@ import Registration from '../pages/Registration'
 import Login from '../pages/Login'
 
 import { auth, handleUserProfile } from './../firebase/utils'
+import { onSnapshot } from 'firebase/firestore'
 
 import './default.scss'
 
@@ -30,14 +31,14 @@ class App extends Component {
     this.authListener = auth.onAuthStateChanged(async userAuth => {
       if (userAuth) {
         const userRef = await handleUserProfile(userAuth)
-        // userRef.onSnapshot(snapshot => {
-        //   this.setState({
-        //     currentUser: {
-        //       id: snapshot.id,
-        //       ...snapshot.data()
-        //     }
-        //   })
-        // })
+        onSnapshot(userRef, snapshot => {
+          this.setState({
+            currentUser: {
+              id: snapshot.id,
+              ...snapshot.data()
+            }
+          })
+        })
       }
 
       this.setState({

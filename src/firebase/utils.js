@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app'
-import { getFirestore, doc, getDoc, setDoc, collection } from 'firebase/firestore'
+import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore'
 import { getAuth, GoogleAuthProvider, signInWithPopup } from  'firebase/auth'
 import firebaseConfig from './config'
 
@@ -17,15 +17,13 @@ export const handleUserProfile = async (userAuth, additionalData) => {
   const { uid } = userAuth
 
   const userRef = doc(firestore, 'users', uid)
-  console.log('userRef:', userRef)
   const snapshot = await getDoc(userRef)
-
-  if (!snapshot.exists) {
+  
+  if (!snapshot.exists()) {
     const { displayName, email } = userAuth
     const timestamp = new Date()
-
     try {
-      await setDoc(doc('users', uid), {
+      await setDoc(doc(firestore, 'users', uid), {
         displayName,
         email,
         createdDate: timestamp,
