@@ -59,7 +59,7 @@ class App extends Component {
         <Header currentUser={currentUser}/>
         <Routes>
           <Route path='/' element={<Homepage />} />
-          <Route path='/registration' element={<Registration />} />
+          <Route path='/registration' element={currentUser ? <Navigate to='/' /> : <Registration />} />
           <Route path='/login' element={currentUser ? <Navigate to='/' /> : <Login />} />
         </Routes>
         <Footer />

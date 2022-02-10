@@ -1,13 +1,16 @@
 import React, { Component } from 'react'
 import Button from '../forms/Button'
 import FormInput from '../forms/FormInput'
+import { auth, handleUserProfile } from './../../firebase/utils'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
 import './styles.scss'
 
 const initialState = {
   displayName: '',
   email: '',
   password: '',
-  comfirmPassword: ''
+  confirmPassword: '',
+  errors: []
 }
 
 class Signup extends Component {
@@ -27,8 +30,33 @@ class Signup extends Component {
     })
   }
 
-  render() {
+  handleFormSubmit = async event => {
+    event.preventDefault()
     const { displayName, email, password, confirmPassword } = this.state
+
+    if (password !== confirmPassword) {
+      const err = ["Passwords don't match"]
+      this.setState({
+        errors: err
+      })
+      return
+    }
+
+    try {
+      const { user } = await createUserWithEmailAndPassword(auth, email, password)
+
+      await handleUserProfile(user, { displayName })
+
+      this.setState({
+        ...initialState
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  render() {
+    const { displayName, email, password, confirmPassword, errors } = this.state
 
     return (
     <div className="signup">
@@ -37,8 +65,20 @@ class Signup extends Component {
           Signup
         </h2>
 
+        {errors.length > 0 && (
+          <ul>
+            {errors.map((err, index) => {
+              return (
+                <li key={index}>
+                  {err}
+                </li>
+              )
+            })}
+          </ul>
+        )}
+
         <div className='formWrap'>
-          <form>
+          <form onSubmit={this.handleFormSubmit}>
             <FormInput 
               type='text'
               name='displayName'
