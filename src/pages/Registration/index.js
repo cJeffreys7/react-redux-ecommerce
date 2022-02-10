@@ -1,13 +1,8 @@
 import React from 'react'
+import Signup from '../../components/SignUp'
 
 const Registration = () => {
-  return (
-    <div>
-      <h1>
-        Registration
-      </h1>
-    </div>
-  )
+  return <Signup />
 }
 
 export default Registration

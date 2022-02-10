@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Buttons from '../forms/Buttons'
+import Button from '../forms/Button'
 import { signInWithGoogle } from './../../firebase/utils'
 import './styles.scss'
 
@@ -21,9 +21,9 @@ class SignIn extends Component {
             <form onSubmit={this.handleSubmit}>
               <div className="socialSignin">
                 <div className="row">
-                  <Buttons onClick={signInWithGoogle}>
+                  <Button onClick={signInWithGoogle}>
                     Sign in with Google
-                  </Buttons>
+                  </Button>
                 </div>
               </div>
             </form>

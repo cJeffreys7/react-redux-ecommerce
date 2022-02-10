@@ -1,0 +1,28 @@
+.signup {
+  display: block;
+  width: 100%;
+  max-width: 40.0rem;
+  border: 1px solid black;
+  margin: 4rem auto 6rem;
+
+  .wrap {
+    padding: 10px;
+
+    h2 {
+      font-size: 22px;
+      line-height: 1;
+      font-weight: 400;
+      text-transform: uppercase;
+      display: block;
+      width: 100%;
+      text-align: center;
+      margin: 0 auto;
+      padding: 0;
+    }
+  }
+
+  .formWrap {
+    margin: 3rem auto 0;
+  }
+
+}
