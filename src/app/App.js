@@ -7,6 +7,7 @@ import Footer from '../components/Footer'
 import Homepage from '../pages/Homepage'
 import Registration from '../pages/Registration'
 import Login from '../pages/Login'
+import Recovery from '../pages/Recovery'
 
 import { auth, handleUserProfile } from './../firebase/utils'
 import { onSnapshot } from 'firebase/firestore'
@@ -61,6 +62,7 @@ class App extends Component {
           <Route path='/' element={<Homepage />} />
           <Route path='/registration' element={currentUser ? <Navigate to='/' /> : <Registration />} />
           <Route path='/login' element={currentUser ? <Navigate to='/' /> : <Login />} />
+          <Route path='/recovery' element={<Recovery />} />
         </Routes>
         <Footer />
       </div>
