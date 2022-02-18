@@ -1,8 +1,8 @@
 import React from 'react'
-import ResetEmailPassword from '../../components/EmailPassword'
+import ResetPassword from '../../components/EmailPassword'
 
 const Recovery = props => {
-  return <ResetEmailPassword />
+  return <ResetPassword />
 }
 
 export default Recovery
