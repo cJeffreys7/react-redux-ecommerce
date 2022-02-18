@@ -9,42 +9,32 @@ import Registration from '../pages/Registration'
 import Login from '../pages/Login'
 import Recovery from '../pages/Recovery'
 
+import { setCurrentUser } from '../redux/User/user.actions'
+import { connect } from 'react-redux'
 import { auth, handleUserProfile } from './../firebase/utils'
 import { onSnapshot } from 'firebase/firestore'
 
 import './default.scss'
 
-const initialState = {
-  currentUser: null
-}
-
 class App extends Component {
-  constructor(props){
-    super(props)
-    this.state = {
-      ...initialState
-    }
-  }
 
   authListener = null
 
   componentDidMount() {
+    const { setCurrentUser } = this.props
+
     this.authListener = auth.onAuthStateChanged(async userAuth => {
       if (userAuth) {
         const userRef = await handleUserProfile(userAuth)
         onSnapshot(userRef, snapshot => {
-          this.setState({
-            currentUser: {
-              id: snapshot.id,
-              ...snapshot.data()
-            }
+          setCurrentUser({
+            id: snapshot.id,
+            ...snapshot.data()
           })
         })
       }
 
-      this.setState({
-        ...initialState
-      })
+      setCurrentUser(userAuth)
     })
   }
 
@@ -53,11 +43,11 @@ class App extends Component {
   }
 
   render() {
-    const { currentUser } = this.state
+    const { currentUser } = this.props
 
     return (
       <div className="App">
-        <Header currentUser={currentUser}/>
+        <Header />
         <Routes>
           <Route path='/' element={<Homepage />} />
           <Route path='/registration' element={currentUser ? <Navigate to='/' /> : <Registration />} />
@@ -70,4 +60,12 @@ class App extends Component {
   }
 }
 
-export default App
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser
+})
+
+const mapDispatchToProps = dispatch => ({
+  setCurrentUser: user => dispatch(setCurrentUser(user))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)
