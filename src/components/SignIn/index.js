@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Button from '../forms/Button'
 import FormInput from '../forms/FormInput'
 import { signInWithGoogle, auth } from './../../firebase/utils'
@@ -13,6 +13,7 @@ const initialState = {
 }
 
 const SignIn = (props) => {
+  const navigate = useNavigate()
   const [formData, setFormData] = useState(initialState)
 
   const handleChange = e => {
@@ -28,6 +29,7 @@ const SignIn = (props) => {
     try {
       await signInWithEmailAndPassword(auth, formData.email, formData.password)
       setFormData(initialState)
+      navigate('/')
     } catch (error) {
       // console.log(error)
     }

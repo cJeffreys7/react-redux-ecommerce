@@ -1,13 +1,17 @@
-import React, { Component } from 'react'
+import React, { useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 
-// components
+// hoc
+import WithAuth from '../hoc/withAuth'
+
+// pages
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import Homepage from '../pages/Homepage'
 import Registration from '../pages/Registration'
 import Login from '../pages/Login'
 import Recovery from '../pages/Recovery'
+import Dashboard from '../pages/Dashboard'
 
 import { setCurrentUser } from '../redux/User/user.actions'
 import { connect } from 'react-redux'
@@ -16,14 +20,13 @@ import { onSnapshot } from 'firebase/firestore'
 
 import './default.scss'
 
-class App extends Component {
+const App = (props) => {
+  const { currentUser, setCurrentUser } = props
 
-  authListener = null
+  // same as componentDidMount
+  useEffect(() => {
 
-  componentDidMount() {
-    const { setCurrentUser } = this.props
-
-    this.authListener = auth.onAuthStateChanged(async userAuth => {
+    const authListener = auth.onAuthStateChanged(async userAuth => {
       if (userAuth) {
         const userRef = await handleUserProfile(userAuth)
         onSnapshot(userRef, snapshot => {
@@ -36,28 +39,29 @@ class App extends Component {
 
       setCurrentUser(userAuth)
     })
-  }
 
-  componentWillUnmount() {
-    this.authListener()
-  }
+    // same as componentWillUnmount
+    return () => {
+      authListener()
+    }
+  }, [])
 
-  render() {
-    const { currentUser } = this.props
-
-    return (
-      <div className="App">
-        <Header />
-        <Routes>
-          <Route path='/' element={<Homepage />} />
-          <Route path='/registration' element={currentUser ? <Navigate to='/' /> : <Registration />} />
-          <Route path='/login' element={currentUser ? <Navigate to='/' /> : <Login />} />
-          <Route path='/recovery' element={<Recovery />} />
-        </Routes>
-        <Footer />
-      </div>
-    )
-  }
+  return (
+    <div className="App">
+      <Header />
+      <Routes>
+        <Route path='/' element={<Homepage />} />
+        <Route path='/registration' element={<Registration />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/recovery' element={<Recovery />} />
+        <Route path='/dashboard' element={
+        <WithAuth>
+          <Dashboard />
+        </WithAuth>} />
+      </Routes>
+      <Footer />
+    </div>
+  )
 }
 
 const mapStateToProps = ({ user }) => ({

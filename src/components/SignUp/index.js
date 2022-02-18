@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+
 import Button from '../forms/Button'
 import FormInput from '../forms/FormInput'
 import AuthWrapper from '../AuthWrapper'
@@ -15,6 +17,7 @@ const initialState = {
 }
 
 const Signup = (props) => {
+  const navigate = useNavigate()
   const [formData, setFormData] = useState(initialState)
 
   const handleChange = (e) => {
@@ -42,6 +45,7 @@ const Signup = (props) => {
       await handleUserProfile(user, { displayName })
 
       setFormData(initialState)
+      navigate('/')
     } catch (error) {
       console.log(error)
     }
